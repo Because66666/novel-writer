@@ -54,7 +54,7 @@ class SaveFileTool(Tool):
             ToolParameter(
                 name="mode",
                 type="string",
-                description="写入模式：'a' 表示追加，'w' 表示覆盖。默认为 'w'。",
+                description="写入模式：'a' 表示追加，在原有内容后追加；'w' 表示覆盖，将原有内容全部删除后再写入。默认为 'w'。",
                 required=mode_required,
             ),
         ]
