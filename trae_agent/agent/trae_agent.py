@@ -130,12 +130,12 @@ class TraeAgent(BaseAgent):
 
         self.project_path = extra_args.get("project_path", "")
         if self.docker_config:
-            user_message += r"[Project root path]:\workspace\n\n"
+            user_message += r"[项目根目录]:\workspace\n\n"
         else:
-            user_message += f"[Project root path]:\n{self.project_path}\n\n"
+            user_message += f"[项目根目录]:\n{self.project_path}\n\n"
 
         if "issue" in extra_args:
-            user_message += f"[Problem statement]: We're currently solving the following issue within our repository. Here's the issue text:\n{extra_args['issue']}\n"
+            user_message += f"[小说开头描述]: 我们正在当前根目录中编写一个小说，小说的开头描述如下：\n{extra_args['issue']}\n"
         optional_attrs_to_set = ["base_commit", "must_patch", "patch_path"]
         for attr in optional_attrs_to_set:
             if attr in extra_args:

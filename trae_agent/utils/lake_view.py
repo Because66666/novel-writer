@@ -14,44 +14,44 @@ StepType = tuple[
 
 
 EXTRACTOR_PROMPT = """
-Given the preceding excerpt, your job is to determine "what task is the agent performing in <this_step>".
-Output your answer in two granularities: <task>...</task><details>...</details>.
-In the <task> tag, the answer should be concise and general. It should omit ANY bug-specific details, and contain at most 10 words.
-In the <details> tag, the answer should complement the <task> tag by adding bug-specific details. It should be informative and contain at most 30 words.
+根据前面的摘录，你的任务是确定"代理在<this_step>中正在执行什么任务"。
+请用两个层次输出你的答案：<task>...</task><details>...</details>。
+在<task>标签中，答案应该简洁而概括。它应该省略任何特定于bug的细节，最多包含10个词。
+在<details>标签中，答案应该通过添加特定于bug的细节来补充<task>标签。它应该是信息丰富的，最多包含30个词。
 
-Examples:
+示例：
 
-<task>The agent is writing a reproduction test script.</task><details>The agent is writing "test_bug.py" to reproduce the bug in XXX-Project's create_foo method not comparing sizes correctly.</details>
-<task>The agent is examining source code.</task><details>The agent is searching for "function_name" in the code repository, that is related to the "foo.py:function_name" line in the stack trace.</details>
-<task>The agent is fixing the reproduction test script.</task><details>The agent is fixing "test_bug.py" that forgets to import the function "foo", causing a NameError.</details>
+<task>代理正在编写复现测试脚本。</task><details>代理正在编写"test_bug.py"来复现XXX-Project的create_foo方法未正确比较大小的bug。</details>
+<task>代理正在检查源代码。</task><details>代理正在代码仓库中搜索"function_name"，这与堆栈跟踪中的"foo.py:function_name"行相关。</details>
+<task>代理正在修复复现测试脚本。</task><details>代理正在修复"test_bug.py"，该脚本忘记导入函数"foo"，导致NameError。</details>
 
-Now, answer the question "what task is the agent performing in <this_step>".
-Again, provide only the answer with no other commentary. The format should be "<task>...</task><details>...</details>".
+现在，回答问题"代理在<this_step>中正在执行什么任务"。
+再次强调，只提供答案，不要其他评论。格式应该是"<task>...</task><details>...</details>"。
 """
 
 TAGGER_PROMPT = """
-Given the trajectory, your job is to determine "what task is the agent performing in the current step".
-Output your answer by choosing the applicable tags in the below list for the current step.
-If it is performing multiple tasks in one step, choose ALL applicable tags, separated by a comma.
+根据轨迹，你的任务是确定"代理在当前步骤中正在执行什么任务"。
+通过从下面的列表中选择适用于当前步骤的标签来输出你的答案。
+如果它在一个步骤中执行多个任务，请选择所有适用的标签，用逗号分隔。
 
 <tags>
-WRITE_TEST: It writes a test script to reproduce the bug, or modifies a non-working test script to fix problems found in testing.
-VERIFY_TEST: It runs the reproduction test script to verify the testing environment is working.
-EXAMINE_CODE: It views, searches, or explores the code repository to understand the cause of the bug.
-WRITE_FIX: It modifies the source code to fix the identified bug.
-VERIFY_FIX: It runs the reproduction test or existing tests to verify the fix indeed solves the bug.
-REPORT: It reports to the user that the job is completed or some progress has been made.
-THINK: It analyzes the bug through thinking, but does not perform concrete actions right now.
-OUTLIER: A major part in this step does not fit into any tag above, such as running a shell command to install dependencies.
+WRITE_TEST: 它编写测试脚本来复现bug，或修改无法工作的测试脚本以修复测试中发现的问题。
+VERIFY_TEST: 它运行复现测试脚本来验证测试环境是否正常工作。
+EXAMINE_CODE: 它查看、搜索或探索代码仓库以了解bug的原因。
+WRITE_FIX: 它修改源代码以修复已识别的bug。
+VERIFY_FIX: 它运行复现测试或现有测试来验证修复确实解决了bug。
+REPORT: 它向用户报告工作已完成或取得了一些进展。
+THINK: 它通过思考分析bug，但目前不执行具体行动。
+OUTLIER: 此步骤的主要部分不符合上述任何标签，例如运行shell命令安装依赖项。
 </tags>
 
 <examples>
-If the agent is opening a file to examine, output <tags>EXAMINE_CODE</tags>.
-If the agent is fixing a known problem in the reproduction test script and then running it again, output <tags>WRITE_TEST,VERIFY_TEST</tags>.
-If the agent is merely thinking about the root cause of the bug without other actions, output <tags>THINK</tags>.
+如果代理正在打开文件进行检查，输出<tags>EXAMINE_CODE</tags>。
+如果代理正在修复复现测试脚本中的已知问题然后再次运行它，输出<tags>WRITE_TEST,VERIFY_TEST</tags>。
+如果代理仅仅在思考bug的根本原因而没有其他行动，输出<tags>THINK</tags>。
 </examples>
 
-Output only the tags with no other commentary. The format should be <tags>...</tags>
+只输出标签，不要其他评论。格式应该是<tags>...</tags>
 """
 
 KNOWN_TAGS = {
@@ -166,6 +166,8 @@ class LakeView:
             content = "<tags>" + llm_response.content.lstrip()
 
             matched_tags: list[str] = tags_re.findall(content)
+            if not matched_tags:
+                break
             tags: list[str] = [tag.strip() for tag in matched_tags[0].split(",")]
             if all(tag in KNOWN_TAGS for tag in tags):
                 return tags
