@@ -30,10 +30,10 @@ class ThoughtData:
 
 
 class SequentialThinkingTool(Tool):
-    """A tool for sequential thinking that helps break down complex problems.
+    """用于顺序思考的工具，帮助分解复杂问题。
 
-    This tool helps analyze problems through a flexible thinking process that can adapt and evolve.
-    Each thought can build on, question, or revise previous insights as understanding deepens.
+    该工具通过灵活的思考过程帮助分析问题，可以适应和演进。
+    每个思考步骤都可以基于、质疑或修正之前的见解，随着理解的深入而发展。
     """
 
     @override
@@ -42,60 +42,60 @@ class SequentialThinkingTool(Tool):
 
     @override
     def get_description(self) -> str:
-        return """A detailed tool for dynamic and reflective problem-solving through thoughts.
-This tool helps analyze problems through a flexible thinking process that can adapt and evolve.
-Each thought can build on, question, or revise previous insights as understanding deepens.
+        return """通过思考进行动态和反思性问题解决的详细工具。
+该工具通过灵活的思考过程帮助分析问题，可以适应和演进。
+每个思考步骤都可以基于、质疑或修正之前的见解，随着理解的深入而发展。
 
-When to use this tool:
-- Breaking down complex problems into steps
-- Planning and design with room for revision
-- Analysis that might need course correction
-- Problems where the full scope might not be clear initially
-- Problems that require a multi-step solution
-- Tasks that need to maintain context over multiple steps
-- Situations where irrelevant information needs to be filtered out
+何时使用此工具：
+- 将复杂问题分解为步骤
+- 需要修正空间的规划和设计
+- 可能需要纠正方向的分析
+- 初始阶段全貌不清晰的问题
+- 需要多步骤解决方案的问题
+- 需要在多个步骤中保持上下文的任务
+- 需要过滤无关信息的情况
 
-Key features:
-- You can adjust total_thoughts up or down as you progress
-- You can question or revise previous thoughts
-- You can add more thoughts even after reaching what seemed like the end
-- You can express uncertainty and explore alternative approaches
-- Not every thought needs to build linearly - you can branch or backtrack
-- Generates a solution hypothesis
-- Verifies the hypothesis based on the Chain of Thought steps
-- Repeats the process until satisfied
-- Provides a correct answer
+主要特性：
+- 可以在进展过程中向上或向下调整总思考数
+- 可以质疑或修正之前的思考
+- 即使在看似结束后也可以添加更多思考
+- 可以表达不确定性并探索替代方法
+- 不是每个思考都需要线性构建 - 可以分支或回溯
+- 生成解决方案假设
+- 基于思维链步骤验证假设
+- 重复过程直到满意
+- 提供正确答案
 
-Parameters explained:
-- thought: Your current thinking step, which can include:
-* Regular analytical steps
-* Revisions of previous thoughts
-* Questions about previous decisions
-* Realizations about needing more analysis
-* Changes in approach
-* Hypothesis generation
-* Hypothesis verification
-- next_thought_needed: True if you need more thinking, even if at what seemed like the end
-- thought_number: Current number in sequence (can go beyond initial total if needed)
-- total_thoughts: Current estimate of thoughts needed (can be adjusted up/down)
-- is_revision: A boolean indicating if this thought revises previous thinking
-- revises_thought: If is_revision is true, which thought number is being reconsidered
-- branch_from_thought: If branching, which thought number is the branching point
-- branch_id: Identifier for the current branch (if any)
-- needs_more_thoughts: If reaching end but realizing more thoughts needed
+参数说明：
+- thought: 当前思考步骤，可以包括：
+* 常规分析步骤
+* 对之前思考的修正
+* 对之前决策的质疑
+* 意识到需要更多分析
+* 方法的改变
+* 假设生成
+* 假设验证
+- next_thought_needed: 如果需要更多思考则为True，即使在看似结束时
+- thought_number: 序列中的当前编号（如需要可超过初始总数）
+- total_thoughts: 当前估计需要的思考数（可向上/向下调整）
+- is_revision: 布尔值，指示此思考是否修正之前的思考
+- revises_thought: 如果is_revision为true，指示正在重新考虑的思考编号
+- branch_from_thought: 如果分支，指示分支点的思考编号
+- branch_id: 当前分支的标识符（如果有）
+- needs_more_thoughts: 如果到达结尾但意识到需要更多思考
 
-You should:
-1. Start with an initial estimate of needed thoughts, but be ready to adjust
-2. Feel free to question or revise previous thoughts
-3. Don't hesitate to add more thoughts if needed, even at the "end"
-4. Express uncertainty when present
-5. Mark thoughts that revise previous thinking or branch into new paths
-6. Ignore information that is irrelevant to the current step
-7. Generate a solution hypothesis when appropriate
-8. Verify the hypothesis based on the Chain of Thought steps
-9. Repeat the process until satisfied with the solution
-10. Provide a single, ideally correct answer as the final output
-11. Only set next_thought_needed to false when truly done and a satisfactory answer is reached"""
+你应该：
+1. 从所需思考的初始估计开始，但准备好调整
+2. 随时质疑或修正之前的思考
+3. 如果需要，不要犹豫添加更多思考，即使在"结尾"
+4. 在存在时表达不确定性
+5. 标记修正之前思考或分支到新路径的思考
+6. 忽略与当前步骤无关的信息
+7. 在适当时生成解决方案假设
+8. 基于思维链步骤验证假设
+9. 重复过程直到对解决方案满意
+10. 提供单一的、理想情况下正确的答案作为最终输出
+11. 只有在真正完成并达到满意答案时才将next_thought_needed设为false"""
 
     @override
     def get_parameters(self) -> list[ToolParameter]:
@@ -103,51 +103,51 @@ You should:
             ToolParameter(
                 name="thought",
                 type="string",
-                description="Your current thinking step",
+                description="当前思考步骤",
                 required=True,
             ),
             ToolParameter(
                 name="next_thought_needed",
                 type="boolean",
-                description="Whether another thought step is needed",
+                description="是否需要另一个思考步骤",
                 required=True,
             ),
             ToolParameter(
                 name="thought_number",
                 type="integer",
-                description="Current thought number. Minimum value is 1.",
+                description="当前思考编号。最小值为1。",
                 required=True,
             ),
             ToolParameter(
                 name="total_thoughts",
                 type="integer",
-                description="Estimated total thoughts needed. Minimum value is 1.",
+                description="估计需要的总思考数。最小值为1。",
                 required=True,
             ),
             ToolParameter(
                 name="is_revision",
                 type="boolean",
-                description="Whether this revises previous thinking",
+                description="是否修正之前的思考",
             ),
             ToolParameter(
                 name="revises_thought",
                 type="integer",
-                description="Which thought is being reconsidered. Minimum value is 1.",
+                description="正在重新考虑的思考编号。最小值为1。",
             ),
             ToolParameter(
                 name="branch_from_thought",
                 type="integer",
-                description="Branching point thought number. Minimum value is 1.",
+                description="分支点思考编号。最小值为1。",
             ),
             ToolParameter(
                 name="branch_id",
                 type="string",
-                description="Branch identifier",
+                description="分支标识符",
             ),
             ToolParameter(
                 name="needs_more_thoughts",
                 type="boolean",
-                description="If more thoughts are needed",
+                description="是否需要更多思考",
             ),
         ]
 
@@ -161,29 +161,29 @@ You should:
         return self._model_provider
 
     def _validate_thought_data(self, arguments: ToolCallArguments) -> ThoughtData:
-        """Validate the input arguments and return a ThoughtData object."""
+        """验证输入参数并返回ThoughtData对象。"""
         if "thought" not in arguments or not isinstance(arguments["thought"], str):
-            raise ValueError("Invalid thought: must be a string")
+            raise ValueError("无效的思考：必须是字符串")
 
         if "thought_number" not in arguments or not isinstance(arguments["thought_number"], int):
-            raise ValueError("Invalid thought_number: must be a number")
+            raise ValueError("无效的思考编号：必须是数字")
 
         if "total_thoughts" not in arguments or not isinstance(arguments["total_thoughts"], int):
-            raise ValueError("Invalid total_thoughts: must be a number")
+            raise ValueError("无效的总思考数：必须是数字")
 
         if "next_thought_needed" not in arguments or not isinstance(
             arguments["next_thought_needed"], bool
         ):
-            raise ValueError("Invalid next_thought_needed: must be a boolean")
+            raise ValueError("无效的next_thought_needed：必须是布尔值")
 
-        # Validate minimum values
+        # 验证最小值
         if arguments["thought_number"] < 1:
-            raise ValueError("thought_number must be at least 1")
+            raise ValueError("思考编号必须至少为1")
 
         if arguments["total_thoughts"] < 1:
-            raise ValueError("total_thoughts must be at least 1")
+            raise ValueError("总思考数必须至少为1")
 
-        # Validate optional revision fields
+        # 验证可选的修正字段
         if (
             "revises_thought" in arguments
             and arguments["revises_thought"] is not None
@@ -193,7 +193,7 @@ You should:
                 not isinstance(arguments["revises_thought"], int)
                 or arguments["revises_thought"] < 1
             ):
-                raise ValueError("revises_thought must be a positive integer")
+                raise ValueError("修正思考编号必须是正整数")
             else:
                 revises_thought = int(arguments["revises_thought"])
         else:
@@ -208,19 +208,19 @@ You should:
                 not isinstance(arguments["branch_from_thought"], int)
                 or arguments["branch_from_thought"] < 1
             ):
-                raise ValueError("branch_from_thought must be a positive integer")
+                raise ValueError("分支起始思考编号必须是正整数")
             else:
                 branch_from_thought = int(arguments["branch_from_thought"])
         else:
             branch_from_thought = None
 
-        # Extract and cast the validated values
+        # 提取并转换验证后的值
         thought = str(arguments["thought"])
         thought_number = int(arguments["thought_number"])  # Already validated as int
         total_thoughts = int(arguments["total_thoughts"])  # Already validated as int
         next_thought_needed = bool(arguments["next_thought_needed"])  # Already validated as bool
 
-        # Handle optional fields with proper type checking
+        # 处理可选字段并进行适当的类型检查
         is_revision = None
         branch_id = None
         needs_more_thoughts = None
@@ -247,20 +247,20 @@ You should:
         )
 
     def _format_thought(self, thought_data: ThoughtData) -> str:
-        """Format a thought for display with visual styling."""
+        """格式化思考以供显示，带有视觉样式。"""
         prefix = ""
         context = ""
 
         if thought_data.is_revision:
-            prefix = "🔄 Revision"
-            context = f" (revising thought {thought_data.revises_thought})"
+            prefix = "🔄 修正"
+            context = f" (修正思考 {thought_data.revises_thought})"
         elif thought_data.branch_from_thought:
-            prefix = "🌿 Branch"
+            prefix = "🌿 分支"
             context = (
-                f" (from thought {thought_data.branch_from_thought}, ID: {thought_data.branch_id})"
+                f" (从思考 {thought_data.branch_from_thought}, ID: {thought_data.branch_id})"
             )
         else:
-            prefix = "💭 Thought"
+            prefix = "💭 思考"
             context = ""
 
         header = f"{prefix} {thought_data.thought_number}/{thought_data.total_thoughts}{context}"
@@ -276,29 +276,29 @@ You should:
 
     @override
     async def execute(self, arguments: ToolCallArguments) -> ToolExecResult:
-        """Execute the sequential thinking tool."""
+        """执行顺序思考工具。"""
         try:
-            # Validate and extract thought data
+            # 验证并提取思考数据
             validated_input = self._validate_thought_data(arguments)
 
-            # Adjust total thoughts if current thought number exceeds it
+            # 如果当前思考编号超过总数，则调整总思考数
             if validated_input.thought_number > validated_input.total_thoughts:
                 validated_input.total_thoughts = validated_input.thought_number
 
-            # Add to thought history
+            # 添加到思考历史
             self.thought_history.append(validated_input)
 
-            # Handle branching
+            # 处理分支
             if validated_input.branch_from_thought and validated_input.branch_id:
                 if validated_input.branch_id not in self.branches:
                     self.branches[validated_input.branch_id] = []
                 self.branches[validated_input.branch_id].append(validated_input)
 
-            # Format and display the thought
+            # 格式化并显示思考
             # formatted_thought = self._format_thought(validated_input)
-            # print(formatted_thought, flush=True)  # Print to stdout for immediate feedback
+            # print(formatted_thought, flush=True)  # 打印到标准输出以获得即时反馈
 
-            # Prepare response
+            # 准备响应
             response_data = {
                 "thought_number": validated_input.thought_number,
                 "total_thoughts": validated_input.total_thoughts,
@@ -308,12 +308,12 @@ You should:
             }
 
             return ToolExecResult(
-                output=f"Sequential thinking step completed.\n\nStatus:\n{json.dumps(response_data, indent=2)}"
+                output=f"顺序思考步骤已完成。\n\n状态：\n{json.dumps(response_data, indent=2)}"
             )
 
         except Exception as e:
             error_data = {"error": str(e), "status": "failed"}
             return ToolExecResult(
-                error=f"Sequential thinking failed: {str(e)}\n\nDetails:\n{json.dumps(error_data, indent=2)}",
+                error=f"顺序思考失败：{str(e)}\n\n详情：\n{json.dumps(error_data, indent=2)}",
                 error_code=-1,
             )
