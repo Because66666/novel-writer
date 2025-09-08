@@ -1,0 +1,15 @@
+# Flask Web API requirements for Trae Agent
+Flask>=2.3.0
+Flask-CORS>=4.0.0
+requests>=2.31.0
+gunicorn>=21.2.0
+waitress>=2.1.2
+
+# Core dependencies (should already be in main requirements)
+# dotenv
+# pathlib
+# asyncio
+# traceback
+# uuid
+# json
+# os

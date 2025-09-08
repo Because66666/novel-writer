@@ -208,9 +208,20 @@ class RichConsoleApp(App[None]):
         step_content = generate_agent_step_table(agent_step)
 
         if self.execution_log:
-            _ = self.execution_log.write(
-                Panel(step_content, title=f"Step {agent_step.step_number}", border_style=color)
-            )
+            # _ = self.execution_log.write(
+            #     Panel(step_content, title=f"Step {agent_step.step_number}", border_style=color)
+            # )
+            data = {
+                'step_number': agent_step.step_number,
+                'thought': agent_step.thought,
+                'tool_calls': getattr(getattr(agent_step,'tool_calls',''),'name',''),
+                'tool_results': getattr(getattr(agent_step,'tool_results',''),'name',''),
+                'llm_response': getattr(getattr(agent_step,'llm_response',''),'content',''),
+                'reflection': agent_step.reflection,
+                'error': agent_step.error,
+                'extra': agent_step.extra,
+            }
+            print(data)
 
     def _help_handler(self, event: Input.Submitted):
         if self.execution_log:
