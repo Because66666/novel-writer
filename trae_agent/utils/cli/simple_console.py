@@ -171,13 +171,13 @@ class SimpleCLIConsole(CLIConsole):
         for key, value in details.items():
             renderable += f"[bold]{key}:[/bold] {value}\n"
         renderable = renderable.strip()
-        # self.console.print(
-        #     Panel(
-        #         renderable,
-        #         title="Task Details",
-        #         border_style="blue",
-        #     )
-        # )
+        self.console.print(
+            Panel(
+                renderable,
+                title="Task Details",
+                border_style="blue",
+            )
+        )
 
     @override
     def print(self, message: str, color: str = "blue", bold: bool = False):

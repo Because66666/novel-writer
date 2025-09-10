@@ -95,45 +95,11 @@ def run_agent_task(task_id: str, task: str, config_data: Dict[str, Any], task_ar
         # 执行任务
         result = asyncio.run(agent.run(task, task_args))
         
-        # 将AgentExecution对象转换为可序列化的格式
-        steps_list = getattr(result, 'steps', [])
-        serializable_steps = []
-        
-        # 处理steps列表中的AgentStep对象
-        if isinstance(steps_list, list):
-            for step in steps_list:
-                if hasattr(step, '__dict__'):
-                    # 将AgentStep对象转换为字典
-                    thought = getattr(step, 'thought', '') or ''
-                    llm_response = getattr(step, 'llm_response', '')
-                    step_dict = {
-                        'step_number': getattr(step, 'step_number', ''),
-                        'thought': thought[:40]+'...' if thought else '',
-                        'state': getattr(getattr(step, 'state', ''),'name',''),
-                        'llm_response': getattr(llm_response, 'content', ''),
-                        'reflection': getattr(step, 'reflection', ''),
-                        'llm_usage': getattr(step, 'llm_usage', time.time())
-                    }
-                    serializable_steps.append(step_dict)
-                else:
-                    # 如果不是对象，直接添加
-                    serializable_steps.append(str(step))
-        
-        result_dict = {
-            'success': getattr(result, 'success', True),
-            'exit_code': getattr(result, 'exit_code', 0),
-            'output': getattr(result, 'output', ''),
-            'error': getattr(result, 'error', ''),
-            'steps': serializable_steps,
-            'steps_count': len(serializable_steps),
-            'total_cost': getattr(result, 'total_cost', 0.0)
-        }
         
         # 发送完成消息
         message_queue.put({
             'type': 'complete',
             'task_id': task_id,
-            'result': result_dict,
             'message': '任务执行完成',
             'timestamp': time.time()
         })

@@ -1,7 +1,7 @@
 import asyncio
 import contextlib
 from enum import Enum
-
+from queue import Queue
 from trae_agent.utils.cli.cli_console import CLIConsole
 from trae_agent.utils.config import AgentConfig, Config
 from trae_agent.utils.trajectory_recorder import TrajectoryRecorder
@@ -61,6 +61,7 @@ class Agent:
         task: str,
         extra_args: dict[str, str] | None = None,
         tool_names: list[str] | None = None,
+        message_queue: Queue | None = None,
     ):
         self.agent.new_task(task, extra_args, tool_names)
 
