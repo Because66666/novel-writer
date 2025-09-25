@@ -133,7 +133,24 @@ class TraeAgent(BaseAgent):
             user_message += r"[项目根目录]:\workspace\n\n"
         else:
             user_message += f"[项目根目录]:\n{self.project_path}\n\n"
-
+            files = os.listdir(self.project_path)
+            # 添加txt文件的行数信息
+            txt_files_info = []
+            for file in files:
+                if file.endswith('.txt'):
+                    file_path = os.path.join(self.project_path, file)
+                    try:
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            line_count = sum(1 for line in f)
+                        txt_files_info.append(f"{file}: {line_count} 行")
+                    except Exception as e:
+                        txt_files_info.append(f"{file}: 无法读取 ({str(e)})")
+            
+            if txt_files_info:
+                user_message += f"[项目根目录下TXT文件行数统计]:\n" + "\n".join(txt_files_info) + "\n\n"
+            else:
+                user_message += f"[项目根目录下TXT文件行数统计]:\n当前目录下无TXT文件，你需要从头新建。\n\n"
+            
         if "issue" in extra_args:
             user_message += f"[小说开头描述]: 我们正在当前根目录中编写一个小说，小说的开头描述如下：\n{extra_args['issue']}\n"
         optional_attrs_to_set = ["base_commit", "must_patch", "patch_path"]

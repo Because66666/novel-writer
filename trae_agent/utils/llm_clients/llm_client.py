@@ -22,6 +22,8 @@ class LLMProvider(Enum):
     OPENROUTER = "openrouter"
     DOUBAO = "doubao"
     GOOGLE = "google"
+    ALI = "ali"
+    ZHIPUAI = "zhipuai"
 
 
 class LLMClient:
@@ -52,6 +54,14 @@ class LLMClient:
                 from .doubao_client import DoubaoClient
 
                 self.client = DoubaoClient(model_config)
+            case LLMProvider.ALI:
+                from .ali_client import AliClient
+
+                self.client = AliClient(model_config)
+            case LLMProvider.ZHIPUAI:
+                from .zhipuai_client import ZhipuaiClient
+
+                self.client = ZhipuaiClient(model_config)
             case LLMProvider.OLLAMA:
                 from .ollama_client import OllamaClient
 

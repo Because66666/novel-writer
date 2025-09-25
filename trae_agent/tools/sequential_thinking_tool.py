@@ -308,7 +308,7 @@ class SequentialThinkingTool(Tool):
             }
 
             return ToolExecResult(
-                output=f"顺序思考步骤已完成。\n\n状态：\n{json.dumps(response_data, indent=2)}"
+                output=f"当前顺序思考步骤已完成。\n\n状态：\n{json.dumps(response_data, indent=2)}"
             )
 
         except Exception as e:
